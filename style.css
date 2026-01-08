@@ -1,8 +1,8 @@
 :root {
-    --bg-color: #fdfaf6;       /* 눈이 편한 미색 종이 컬러 */
-    --text-color: #2c2c2c;     /* 완전 검정보다 부드러운 짙은 회색 */
-    --accent-color: #8b4513;   /* 포인트 컬러 (갈색) */
-    --note-word-color: #555;   /* 주석 단어 색상 */
+    --bg-color: #fdfaf6;
+    --text-color: #2c2c2c;
+    --accent-color: #8b4513;
+    --base-font-size: 18px; /* 기본 폰트 사이즈 변수 */
 }
 
 * { box-sizing: border-box; }
@@ -10,257 +10,264 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Noto Serif KR', serif; /* 명조체 */
+    font-family: 'Noto Serif KR', serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.8;
-    font-size: 18px; /* 모바일 가독성 최적화 */
-    -webkit-font-smoothing: antialiased;
+    font-size: var(--base-font-size); /* 변수 적용 */
+    overflow-x: hidden; /* 가로 스크롤 방지 */
 }
 
 /* 상단 바 */
 #top-bar {
     position: sticky;
     top: 0;
-    background: rgba(253, 250, 246, 0.95);
+    background: rgba(253, 250, 246, 0.98);
     border-bottom: 1px solid #e0e0e0;
-    padding: 15px 20px;
+    height: 55px;
+    padding: 0 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     z-index: 100;
-    backdrop-filter: blur(5px);
 }
 
-#top-bar h1 {
+#top-bar-title {
+    font-size: 1rem;
     margin: 0;
-    font-size: 1.1rem;
+    font-weight: normal;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 70%;
-}
-
-html {
-    scroll-behavior: smooth; /* 목차 클릭 시 부드럽게 이동 */
-}
-
-/* 표지 영역 스타일 */
-#cover-section {
+    max-width: 60%;
     text-align: center;
-    padding: 40px 20px;
-    margin-bottom: 50px;
 }
 
-.cover-image-box img {
-    max-width: 100%;
-    width: 400px; /* 표지 크기 조절 */
-    height: auto;
-    box-shadow: 5px 5px 15px rgba(0,0,0,0.2); /* 그림자 효과 */
-    margin-bottom: 20px;
-    border-radius: 4px;
-}
-
-#book-title-main {
-    font-size: 1.8rem;
-    color: var(--accent-color);
-    margin-bottom: 10px;
-}
-
-#book-author {
-    font-size: 1rem;
-    text-align: center;
-    color: #555;
-    margin-bottom: 30px;
-}
-
-.divider { border: 0; border-top: 1px solid #ddd; margin: 30px auto; width: 50%; }
-.section-divider { border: 0; border-top: 2px dashed #ccc; margin: 50px 0; }
-
-/* 목차(TOC) 스타일 */
-#toc-container {
-    max-width: 500px;
-    margin: 0 auto;
-    text-align: left;
-    background: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    border: 1px solid #eee;
-}
-
-#toc-container h3 { text-align: center; margin-top: 0; }
-
-#toc-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.toc-item {
-    padding: 12px 10px;
-    border-bottom: 1px solid #f0f0f0;
+/* 상단 버튼 공통 스타일 */
+#top-bar button {
+    background: transparent;
+    border: none;
+    font-size: 1.4rem;
     cursor: pointer;
-    transition: background 0.2s;
+    color: #444;
+    padding: 5px 10px;
+}
+
+/* 폰트 설정 패널  */
+#font-settings-panel {
+    position: fixed;
+    top: 60px;
+    left: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    z-index: 99;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.font-ctrl-btn {
+    background: #f0f0f0;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Noto Serif KR', serif;
+}
+
+#current-font-size { font-size: 0.9rem; color: #666; width: 40px; text-align: center; }
+
+/* 사이드바 (목차) */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100%;
+    background: #fff;
+    z-index: 1001; /* 오버레이보다 위 */
+    transition: left 0.3s ease-in-out;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+#sidebar.open { left: 0; /* 화면 안으로 들어옴 */ }
+
+.sidebar-header {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: #fafafa;
 }
 
-.toc-item:last-child { border-bottom: none; }
-.toc-item:hover { background-color: #f9f9f9; }
+.sidebar-header h2 { margin: 0; font-size: 1.2rem; color: var(--accent-color); }
+#btn-close-sidebar { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
 
-/* 번역 안 된 챕터 스타일 */
-.toc-item.not-translated {
-    color: #aaa;
-    cursor: not-allowed;
+#sidebar-toc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex: 1;
 }
-.toc-item.not-translated::after {
-    content: "번역 중...";
-    font-size: 0.7rem;
-    background: #eee;
-    color: #777;
-    padding: 2px 6px;
-    border-radius: 4px;
+
+.toc-item {
+    padding: 15px;
+    border-bottom: 1px solid #f9f9f9;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+
+.toc-item:hover { background-color: #f5f5f5; }
+.toc-item.not-translated { color: #aaa; }
+
+/* 사이드바 배경 오버레이 */
+#sidebar-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 1000;
 }
 
 /* 본문 영역 */
 #book-content {
     max-width: 800px;
     margin: 0 auto;
-    padding: 20px 25px;
+    padding: 20px 40px; 
     padding-bottom: 100px;
     min-height: 100vh;
 }
 
-article.chapter { margin-bottom: 20px; overflow: hidden; }
-h2 { color: var(--accent-color); margin-top: 20px; margin-bottom: 20px; }
-/* style.css 수정 */
-
+/* 텍스트 스타일 개선 */
 p {
     margin-bottom: 1.5em;
-
-    /* 핵심 설정 */
-    text-align: justify;     /* 양쪽 정렬 */
-    word-break: break-all;   /* 단어가 잘리더라도 줄바꿈을 해서 빈 공간 없애기 */
-    
-    /* 가독성 팁 */
-    line-height: 1.8;
-    letter-spacing: -0.03em;
+    text-align: justify; /* 양쪽 정렬 */
+    word-break: break-all; /* 단어 끊어서 정렬 맞춤 */
 }
 
-/* 주석 단어 스타일 */
-.footnote-word {
-    color: var(--note-word-color);
-    font-weight: 700;
-    cursor: pointer;
-    text-decoration: underline;
-    text-decoration-style: dotted;
-    text-underline-offset: 4px;
+/* 표지 이미지 */
+.cover-container { text-align: center; margin: 10px 0;  }
+.cover-container img { max-width: 100%; box-shadow: 5px 5px 15px rgba(0,0,0,0.2); border-radius: 8px; }
+
+/* 표지 텍스트 전용 스타일 (본문 설정 무시) */
+.cover-container p, 
+.cover-credits p {
+    text-align: center !important;
+    margin: 5px 0;
+    line-height: 1.4;
+    word-break: keep-all !important;
+}
+
+/* 제목이랑 작가 이름 사이 간격 */
+.cover-container h2 {
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+/* 저작권 정보 박스 전체 여백 */
+.cover-credits {
+    margin: 30px 0 40px 0;
+    padding: 10px;
     background-color: rgba(0,0,0,0.03);
-    padding: 0 2px;
-    border-radius: 3px;
-}
-
-/* 삽화 스타일 */
-.illustration { margin-bottom: 1em; }
-.illustration img { max-width: 100%; height: auto; border-radius: 4px; display: block;}
-.illustration .caption {
-    display: block; 
-    font-size: 0.8rem; 
-    color: #777; 
-    text-align: center; 
-    margin-top: 8px;
-    font-family: sans-serif;
-}
-
-/* 삽화 배치용 클래스 (PC 기준) */
-.float-right { float: right; width: 45%; margin-left: 20px; margin-bottom: 10px; }
-.float-left { float: left; width: 45%; margin-right: 20px; margin-bottom: 10px; }
-.full-width { width: 100%; margin: 30px 0; }
-.center-img { display: flex; flex-direction: column; align-items: center; margin: 30px 0; }
-
-/* 모달 (팝업) 스타일 */
-#modal-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    opacity: 1;
-    transition: opacity 0.2s;
-}
-
-.modal-box {
-    background: #fff;
-    width: 85%;
-    max-width: 400px;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-    animation: slideUp 0.3s ease-out;
-}
-
-@keyframes slideUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
-
-#modal-title {
-    margin-top: 0;
-    color: var(--accent-color);
-    font-size: 1.3rem;
-    border-bottom: 2px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-}
-
-#modal-text {
-    font-size: 1rem;
-    line-height: 1.6;
-    color: #444;
-    margin-bottom: 25px;
-}
-
-#btn-close-modal {
-    width: 100%;
-    padding: 12px;
-    background: #f1f1f1;
-    border: none;
     border-radius: 8px;
-    font-size: 1rem;
-    color: #333;
-    cursor: pointer;
 }
 
-/* 유틸리티 */
-.hidden { display: none !important; opacity: 0; }
+.credit-main { font-size: 0.95rem; color: #333; font-weight: bold; }
+.credit-sub { font-size: 0.8rem; color: #777; }
+.credit-warn { font-size: 0.7rem; color: #aaa; margin-top: 8px !important; }
 
-/* 토스트 메시지 */
-#toast {
-    position: fixed; bottom: 40px; left: 50%;
-    transform: translateX(-50%);
-    background: rgba(40,40,40,0.9);
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 50px;
-    font-size: 0.9rem;
-    z-index: 2000;
-    animation: fadeIn 0.3s;
+
+/* 주석, 모달, 삽화 스타일 */
+.footnote-word { color: #555; font-weight: 700; cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 4px; }
+.illustration { margin-bottom: 1em; overflow: hidden; }
+.illustration img { max-width: 100%; height: auto; border-radius: 4px; display: block; }
+.illustration .caption { display: block; font-size: 0.8rem; color: #777; text-align: center; margin-top: 8px; }
+.float-right { float: right; width: 45%; margin-left: 20px; margin-bottom: 10px; }
+.full-width { width: 100%; margin: 30px 0; }
+article.chapter { margin-bottom: 60px; overflow: hidden; border-bottom: 1px solid #eee; padding-bottom: 40px; }
+#modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: flex; justify-content: center; align-items: center; z-index: 2000; }
+.modal-box { background: #fff; width: 85%; max-width: 400px; padding: 25px; border-radius: 12px; }
+#modal-title { margin-top: 0; color: var(--accent-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+#btn-close-modal { width: 100%; padding: 12px; background: #f1f1f1; border: none; cursor: pointer; border-radius: 8px;}
+.hidden { display: none !important; }
+#toast { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(40,40,40,0.9); color: #fff; padding: 12px 24px; border-radius: 50px; z-index: 2000; }
+
+
+/* 가운데 정렬 박스 */
+.img-center {
+    display: flex !important;       /* 무조건 플렉스 박스로 작동 */
+    justify-content: center !important; /* 가로 방향 무조건 가운데 */
+    width: 100% !important;         /* 전체 너비 다 쓰기 */
+    margin: 30px 0;                 /* 위아래 여백 */
 }
 
-@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+/* 이미지 스타일 초기화 (혹시 다른 스타일이 방해할까봐) */
+.img-center img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto; /* 자체적으로도 가운데 정렬 시도 */
+}
 
-/* 모바일 대응 (화면 폭 600px 이하) */
+/* 캡션도 가운데 정렬 */
+.img-center .caption {
+    text-align: center;
+    display: block;
+    width: 100%;
+    margin-top: 5px;
+    color: #777;
+    font-size: 0.8rem;
+}
+
+/* 캡션과 이미지를 세로로 정렬하기 위해 내부 래퍼가 필요할 경우 */
+.img-center-col {
+    display: flex !important;
+    flex-direction: column !important; /* 세로 배치 (이미지 위, 글자 아래) */
+    align-items: center !important;    /* 세로 축 기준 가운데 */
+    width: 100%;
+    margin: 30px 0;
+}
+
+/* 모바일 전용 미디어쿼리 */
 @media (max-width: 600px) {
-    body { font-size: 17px; }
-    #book-content { padding: 15px; }
-    
-    /* 모바일에서는 삽화가 글자를 감싸면 너무 좁으니 풀사이즈로 변경 */
-    .float-right, .float-left { 
-        float: none; 
-        width: 100%; 
-        margin: 20px 0; 
+    #book-content {
+        /* 모바일에서 좌우 여백 더 확보 */
+        padding: 20px 30px; 
     }
+    .float-right, .float-left { float: none; width: 100%; margin: 20px 0; }
+    .cover-container img { max-width: 80%; }
+}
+
+/* 전체 드래그 방지 */
+body {
+    -webkit-user-select: none; /* 크롬, 사파리 */
+    -moz-user-select: none;    /* 파이어폭스 */
+    -ms-user-select: none;     /* 인터넷 익스플로러/엣지 */
+    user-select: none;         /* 표준 */
+}
+
+button, input {
+    -webkit-user-select: auto;
+    -moz-user-select: auto;
+    -ms-user-select: auto;
+    user-select: auto;
+}
+
+.footer p {
+    font-size: 12px;
+    text-align: center;
+    color: #aaa;
+}
+
+.footer a {
+    color: #777;
+    font-weight: bold;
+    text-decoration: none;
 }
