@@ -3,46 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>All Tomorrows</title>
+    <title>나의 번역서 뷰어</title>
+    <!-- 폰트 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- 상단 고정 바 -->
+    <!-- 상단 네비게이션 바 -->
     <header id="top-bar">
-        <h1 id="top-bar-title">목차를 선택하세요</h1>
+        <!-- 1. 폰트 조절 버튼 (왼쪽) -->
+        <button id="btn-font-toggle" aria-label="글자 크기 설정">Aa</button>
+        
+        <!-- 제목 -->
+        <h1 id="top-bar-title">로딩 중...</h1>
+
+        <!-- 2. 햄버거 메뉴 버튼 (오른쪽) -->
+        <button id="btn-menu-toggle" aria-label="목차 열기">☰</button>
     </header>
 
-    <!-- 메인 컨텐츠 영역 -->
-    <main>
-        <!-- 1. 표지와 목차 (Cover & TOC) -->
-        <section id="cover-section">
-            <div class="cover-image-box">
-                <img id="cover-img" src="" alt="표지 이미지">
-            </div>
-            <h1 id="book-title-main"></h1>
-            <p id="book-author"></p>
-            
-            <hr class="divider">
-            
-            <nav id="toc-container">
-                <h3>목차</h3>
-                <ul id="toc-list">
-                    <!-- 자바스크립트가 여기에 목록을 만듭니다 -->
-                </ul>
-            </nav>
-        </section>
+    <!-- 3. 폰트 설정 패널 (평소엔 숨김) -->
+    <div id="font-settings-panel" class="hidden">
+        <button id="btn-font-decrease" class="font-ctrl-btn">가 -</button>
+        <span id="current-font-size">100%</span>
+        <button id="btn-font-increase" class="font-ctrl-btn">가 +</button>
+    </div>
 
-        <hr class="section-divider">
+    <!-- 4. 사이드바 (목차) -->
+    <div id="sidebar-overlay" class="hidden"></div> <!-- 검은 배경 -->
+    <aside id="sidebar">
+        <div class="sidebar-header">
+            <h2>목차</h2>
+            <button id="btn-close-sidebar">✕</button>
+        </div>
+        <ul id="sidebar-toc-list">
+            <!-- JS가 여기에 목차를 채움 -->
+        </ul>
+    </aside>
 
-        <!-- 2. 본문 내용 (Book Content) -->
-        <section id="book-content">
-            <!-- 자바스크립트가 여기에 본문을 채웁니다 -->
-        </section>
+    <!-- 본문 내용 -->
+    <main id="book-content">
+        <!-- 표지 및 챕터 내용이 들어감 -->
     </main>
 
-    <!-- 모달, 토스트 등 기존 요소 유지 -->
+    <!-- 주석 모달 -->
     <div id="modal-overlay" class="hidden">
         <div class="modal-box">
             <h3 id="modal-title"></h3>
@@ -50,9 +56,14 @@
             <button id="btn-close-modal">닫기</button>
         </div>
     </div>
-    <div id="toast" class="hidden">알림 내용</div>
+
+    <div class="footer">
+        <p>더 많은 이야기를 경험하고 싶다면 모해남자고등학교 <a href="https://www.band.us/band/93681481/post/580">외계인 숭배자 클럽</a>에 가입해보세요!</p>
+    </div>
+    
+    <!-- 토스트 메시지 -->
+    <div id="toast" class="hidden"></div>
 
     <script src="script.js"></script>
 </body>
-
 </html>
