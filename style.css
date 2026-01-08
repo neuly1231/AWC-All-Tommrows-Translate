@@ -268,15 +268,31 @@ button, input {
     user-select: auto;
 }
 
-.footer p {
-    font-size: 12px;
-    text-align: center;
-    color: #aaa;
-    margin: 20px 0;
+/* 1. 이미지 잘림 해결 (모바일 필수) */
+#book-content img {
+    max-width: 100% !important;  /* 화면 폭보다 크면 자동으로 줄어듦 */
+    height: auto !important;     /* 비율 깨짐 방지 */
+    display: block !important;
+    margin: 0 auto !important;   /* 기본적으로 가운데 정렬 */
 }
 
-.footer a {
-    color: #777;
-    font-weight: bold;
-    text-decoration: none;
+/* 2. 캡션 스타일 원상복구 (예전의 깔끔한 스타일) */
+.caption {
+    display: block !important;
+    font-size: 0.85rem !important; /* 글자 크기 적당하게 */
+    color: #777 !important;        /* 회색 */
+    text-align: center !important; /* 가운데 정렬 */
+    margin-top: 10px !important;   /* 이미지랑 간격 */
+    font-family: sans-serif !important; /* 깔끔한 고딕체 */
+    font-weight: normal !important;
+    line-height: 1.4 !important;
+}
+
+/* 3. 가운데 정렬 컨테이너 (안전장치 강화) */
+.img-center-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 30px 0 !important;
 }
